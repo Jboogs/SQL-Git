@@ -13,13 +13,6 @@ CREATE TABLE Book_Copies (
 	Number_Of_Copies INT NOT NULL
 	);
 
-ALTER TABLE Book_Copies
-	ADD CONSTRAINT fk_branch_id_book_copies 
-	FOREIGN KEY (BranchID) REFERENCES Library_Branch(BranchID) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE Book_Copies
-	ADD CONSTRAINT fk_book_ID_book_copies 
-	FOREIGN KEY (BookID) REFERENCES Books(BookID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 CREATE TABLE Books (
@@ -27,12 +20,7 @@ CREATE TABLE Books (
 	Title VARCHAR(100) NOT NULL,
 	PublisherName VARCHAR(100) --FK Done
 	);
-ALTER TABLE Books
-	ALTER COLUMN PublisherName VARCHAR(100) NOT NULL;
 
-ALTER TABLE Books
-ADD CONSTRAINT fk_publisher_name
-	FOREIGN KEY (PublisherName) REFERENCES Publisher(PublisherName) ON DELETE CASCADE ON UPDATE CASCADE;
 	
 CREATE TABLE Book_Authors (
 	BookID INT NOT NULL CONSTRAINT fk_book_id REFERENCES Books(BookID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -64,7 +52,19 @@ CREATE TABLE Book_Loans (
 	DateIn DATE NOT NULL
 	);
 
-SELECT * FROM Library_Branch
+ALTER TABLE Book_Copies
+	ADD CONSTRAINT fk_branch_id_book_copies 
+	FOREIGN KEY (BranchID) REFERENCES Library_Branch(BranchID) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE Book_Copies
+	ADD CONSTRAINT fk_book_ID_book_copies 
+	FOREIGN KEY (BookID) REFERENCES Books(BookID) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE Books
+ADD CONSTRAINT fk_publisher_name_books
+	FOREIGN KEY (PublisherName) REFERENCES Publisher(PublisherName) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
 
 INSERT INTO Library_Branch
 	(BranchName, BranchAddress)
@@ -106,8 +106,9 @@ INSERT INTO Publisher
 	('McGraw-Hill Education', 'New York, NY', '1-800-338-3987')
 	;
 
-	SELECT * FROM Books
---NOT EXECUTED YET
+	SELECT * FROM Publisher;
+	SELECT* FROM Books
+
 INSERT INTO Books 
 	(Title, PublisherName)
 	VALUES
@@ -131,6 +132,76 @@ INSERT INTO Books
 	('Sleeping Beauties', 'Scribner'),
 	('Harry Potter and the Sorcerers Stone', 'Pottermore Publishing'),
 	('Howerd Stern Comes Again', 'Simon & Schuster');
---NOT EXECUTED YET
+
+INSERT INTO Books
+(Title, PublisherName)
+VALUES
+('The Lost Tribe', 'Hatchette Livre');
+
+SELECT * FROM Book_Authors
+SELECT * FROM Books
+
+INSERT INTO Book_Authors
+	(BookID, AuthorName)
+	VALUES
+	(10000, 'J.K. Rawling'),
+	(10001, 'J.K. Rawling'),
+	(10002, 'George R.R. Martin'),
+	(10003, 'George R.R. Martin'),
+	(10004, 'Stephen King'),
+	(10005, 'Stephen King'),
+	(10007, 'J. R. R. Tolkein'),
+	(10008, 'J. R. R. Tolkein'),
+	(10009, 'J. R. R. Tolkein'),
+	(10010, 'J. R. R. Tolkein')
+	;
+SELECT * FROM Book_Copies
+SELECT* FROM Books
+SELECT * FROM Library_Branch
+
+INSERT INTO Book_Copies
+(BookID, BranchID, Number_Of_Copies)
+VALUES
+(10002, 1, 4),
+(10004, 2, 2),
+(10001, 1, 6),
+(10005, 3, 3),
+(10001, 2, 3),
+(10007, 2, 2), 
+(10007, 3, 2),
+(10007, 4, 2),
+(10007, 5, 2),
+(10008, 3, 2),
+(10009, 4, 2),
+(10010, 5, 2),
+(10010, 6, 2),
+(10007, 1, 2);
+
+SELECT * FROM Books
+SELECT * FROM Library_Branch
+SELECT * FROM Borrower
+
+INSERT INTO Book_Loans
+(BookID, BranchID, CardNo, DateOut, DateIn)
+VALUES
+(1000, 1, 101, 2020-04-21, 2020-05-21),
+(1002, 2, 100, 2020-03-12, 2020-04-12),
+(1000, 3, 102, 2020-04-01, 2020-05-01),
+(1000, 1, 101, 2020-05-02, 2020-06-02),
+(1000, 1, 104, 2020-05-20, 2020-06-20),
+(1000, 5, 107, 2020-05-20, 2020-06-20),
+(1000, 6, 105, 2020-04-17, 2020-05-17),
+(1000, 3, 102, 2020-06-01, 2020-07-01),
+(1000, 4, 102, 2020-01-01, 2020-02-01),
+(1000, 3, 107, 2020-05-22, 2020-06-22);
+
+
+
+
+
+
+
+
+
 
 
