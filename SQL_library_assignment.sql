@@ -62,9 +62,11 @@ ALTER TABLE Book_Copies
 
 ALTER TABLE Books
 ADD CONSTRAINT fk_publisher_name_books
-	FOREIGN KEY (PublisherName) REFERENCES Publisher(PublisherName) ON DELETE CASCADE ON UPDATE CASCADE;
+	FOREIGN KEY (BookPublisherName) REFERENCES Publisher(PublisherName) ON DELETE CASCADE ON UPDATE CASCADE;
 
-
+ALTER TABLE Books
+	DROP CONSTRAINT fk_publisher_name_books;
+	
 
 INSERT INTO Library_Branch
 	(BranchName, BranchAddress)
@@ -110,7 +112,7 @@ INSERT INTO Publisher
 	SELECT* FROM Books
 
 INSERT INTO Books 
-	(Title, PublisherName)
+	(Title, BookPublisherName)
 	VALUES
 	('Harry Potter and the Halfblood Prince', 'Pottermore Publishing'),
 	('Harry Potter and the Prisoner of Azkaban', 'Pottermore Publishing'),
@@ -131,29 +133,38 @@ INSERT INTO Books
 	('SAT/ACT Prep Book', 'McGraw-Hill Education'),
 	('Sleeping Beauties', 'Scribner'),
 	('Harry Potter and the Sorcerers Stone', 'Pottermore Publishing'),
-	('Howerd Stern Comes Again', 'Simon & Schuster');
+	('Howerd Stern Comes Again', 'Simon & Schuster'),
+	('The Lost Tribe', 'Hatchette Livre');
 
 INSERT INTO Books
-(Title, PublisherName)
+(Title, BookPublisherName)
 VALUES
-('The Lost Tribe', 'Hatchette Livre');
+('Talking to Strangers', 'Hatchette Livre'),
+	('On the Come Up', 'HarperCollins'),
+	('Me', 'MacMillan Publishers'),
+	('The Institute', 'Simon & Schuster'),
+	('The Institute', 'Simon & Schuster'),
+	('SAT/ACT Prep Book', 'McGraw-Hill Education'),
+	('Sleeping Beauties', 'Scribner'),
+	('Harry Potter and the Sorcerers Stone', 'Pottermore Publishing'),
+	('Howerd Stern Comes Again', 'Simon & Schuster');
 
-SELECT * FROM Book_Authors
+
 SELECT * FROM Books
 
 INSERT INTO Book_Authors
 	(BookID, AuthorName)
 	VALUES
-	(10000, 'J.K. Rawling'),
-	(10001, 'J.K. Rawling'),
-	(10002, 'George R.R. Martin'),
-	(10003, 'George R.R. Martin'),
-	(10004, 'Stephen King'),
-	(10005, 'Stephen King'),
-	(10007, 'J. R. R. Tolkein'),
-	(10008, 'J. R. R. Tolkein'),
-	(10009, 'J. R. R. Tolkein'),
-	(10010, 'J. R. R. Tolkein')
+	(10053, 'J.K. Rawling'),
+	(10054, 'J.K. Rawling'),
+	(10055, 'George R.R. Martin'),
+	(10056, 'George R.R. Martin'),
+	(10057, 'Stephen King'),
+	(10058, 'Stephen King'),
+	(10060, 'J. R. R. Tolkein'),
+	(10061, 'J. R. R. Tolkein'),
+	(10062, 'J. R. R. Tolkein'),
+	(10063, 'J. R. R. Tolkein')
 	;
 SELECT * FROM Book_Copies
 SELECT* FROM Books
@@ -162,40 +173,54 @@ SELECT * FROM Library_Branch
 INSERT INTO Book_Copies
 (BookID, BranchID, Number_Of_Copies)
 VALUES
-(10002, 1, 4),
-(10004, 2, 2),
-(10001, 1, 6),
-(10005, 3, 3),
-(10001, 2, 3),
-(10007, 2, 2), 
-(10007, 3, 2),
-(10007, 4, 2),
-(10007, 5, 2),
-(10008, 3, 2),
-(10009, 4, 2),
-(10010, 5, 2),
-(10010, 6, 2),
-(10007, 1, 2);
+(10052, 1, 4),
+(10054, 2, 2),
+(10059, 1, 6),
+(10063, 3, 3),
+(10061, 2, 3),
+(10059, 2, 2), 
+(10060, 3, 2),
+(10060, 4, 2),
+(10061, 5, 2),
+(10062, 3, 2),
+(10063, 4, 2),
+(10056, 5, 2),
+(10059, 6, 2),
+(10056, 1, 2);
 
-SELECT * FROM Books
-SELECT * FROM Library_Branch
+
+
 SELECT * FROM Borrower
+SELECT * FROM Book_Loans
 
 
 
 INSERT INTO Book_Loans
 (BookID, BranchID, CardNo, DateOut, DateIn)
 VALUES
-(1000, 1, 101, '2020-04-21', '2020-05-21'),
-(1002, 2, 100, '2020-03-12', '2020-04-12'),
-(1000, 3, 102, '2020-04-01', '2020-05-01'),
-(1000, 1, 101, '2020-05-02', '2020-06-02'),
-(1000, 1, 104, '2020-05-20', '2020-06-20'),
-(1000, 5, 107, '2020-05-20', '2020-06-20'),
-(1000, 6, 105, '2020-04-17', '2020-05-17'),
-(1000, 3, 102, '2020-06-01', '2020-07-01'),
-(1000, 4, 102, '2020-01-01', '2020-02-01'),
-(1000, 3, 107, '2020-05-22', '2020-06-22');
+(10052, 1, 101, '2020-04-21', '2020-05-21'),
+(10054, 2, 100, '2020-03-12', '2020-04-12'),
+(10060, 3, 102, '2020-04-01', '2020-05-01'),
+(10059, 1, 101, '2020-05-02', '2020-06-02'),
+(10052, 1, 104, '2020-05-20', '2020-06-20'),
+(10061, 5, 107, '2020-05-20', '2020-06-20'),
+(10054, 2, 105, '2020-04-17', '2020-05-17'),
+(10060, 3, 102, '2020-06-01', '2020-07-01'),
+(10060, 4, 102, '2020-01-01', '2020-02-01'),
+(10063, 3, 107, '2020-05-22', '2020-06-22');
+
+
+SELECT * 
+FROM Book_Loans 
+FULL OUTER JOIN Borrower ON Book_Loans.CardNo = Borrower.CardNo 
+FULL OUTER JOIN Books ON Book_Loans.BookID = Books.BookID;
+
+SELECT * FROM Book_Authors
+SELECT * FROM Books
+
+SELECT a1.Title, a2.AuthorName
+FROM Books a1
+INNER JOIN Book_Authors a2 ON a2.BookID = a1.BookID;
 
 
 
